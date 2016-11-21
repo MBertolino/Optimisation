@@ -3,14 +3,14 @@ load('Sharad.mat')
 
 %%
 % Initial guesses 
-Ai = 1; %1e-26;
-ni = 2.5;
+Ai = 10; %1e-26;
+ni = 1.1;
 p0 = [Ai ni];
 
 Ascale = 1e-26;
 
 % Optimization options
-options = optimoptions(@fminunc, 'Algorithm', 'quasi-newton','OptimalityTolerance', 1e-9, 'Display', 'iter');
+options = optimoptions(@fminunc, 'Algorithm', 'quasi-newton','OptimalityTolerance', 1e-9, 'Display', 'iter', 'MaxFunctionEvaluations', 1024);
 options_LS = optimoptions(@lsqnonlin, 'Display', 'iter');
 % Objective function
 H_cost = @(n) norm((-a.*(n+2)./(2*Ai*Ascale).*(rho*g).^(-n).*abs(dhdx).^(1-n)./dhdx).^(1/(n+2)) - H_obs)^2;
@@ -31,10 +31,17 @@ H_cost3 = @(p) norm((-a.*(p(2)+2)./(2*p(1)*Ascale).*(rho*g).^(-p(2)).*abs(dhdx).
 [p,f3val,exitflag3,output3] = fminunc(H_cost3,p0,options);
 p(1) = p(1)*Ascale;
 
+%% Least squares
+disp('Least squares')
+H_LS = @(p)(-a.*(p(2)+2)./(2*p(1)*Ascale).*(rho*g).^(-p(2)).*abs(dhdx).^(1-p(2))./dhdx).^(1/(p(2)+2)) - H_obs;
+pLS = lsqnonlin(H_LS, p0, [], [], options_LS);
+
+
+
 %% Linearized H_cost
 % Miniminze H_cost3 to find both A and n simultaniously
-A1 = -26;
-n1 = 2.5;
+A1 = -25;
+n1 = 1.1;
 p0 = [A1, n1];
 
 H_costl3 = @(p) norm((-a.*(p(2)+2)./(2*10^p(1)).*(rho*g).^(-p(2)).*abs(dhdx).^(1-p(2))./dhdx).^(1/(p(2)+2)) - H_obs)^2;
@@ -47,7 +54,7 @@ n2 = 1.1;
 p0 = [A2, n2];
 
 H_vec = @(p)(-a.*(p(2)+2)./(2*10^p(1)).*(rho*g).^(-p(2)).*abs(dhdx).^(1-p(2))./dhdx).^(1/(p(2)+2)) - H_obs;
-plLS = lsqnonlin(H_vec, p0, [], [], options_LS)
+plLS = lsqnonlin(H_vec, p0, [], [], options_LS);
 
 
 
@@ -74,14 +81,17 @@ H_minLS = H_cost3([10^plLS(1)/Ascale, plLS(2)]);
 plot3(plLS(2),plLS(1),log10(H_minLS),'marker','o')
 
 H_minl3 = H_cost3([10^pl3(1)/Ascale, pl3(2)]);
-plot3(pl3(2),pl3(1),log10(H_minl3),'marker','o')
+plot3(pl3(2),pl3(1),log10(H_minl3),'marker','s')
 
-plot3(p(2), log10(p(1)), log10(f3val), 'marker', 'o')
+plot3(p(2), log10(p(1)), log10(f3val), 'marker', 'x')
 plot3(ni, log10(A), log10(Aval), 'marker', 'o')
-plot3(n, log10(Ai), log10(Hval), 'marker', 'o')
+%plot3(n, log10(Ai), log10(Hval), 'marker', 'o')
+
+H_LS = H_cost3([pLS(1)*Ascale, pLS(2)]);
+plot3(pLS(2),log10(pLS(1)*Ascale),log10(H_minl3),'marker','*')
 hold off
 
-legend('Surface', 'Least square', 'H3 lin', 'H3(A,n)', 'H2(A)', 'H(n)')
+legend('Surface', 'Least square lin', 'H3 lin', 'H3(A,n)', 'H2(A)', 'Least Squares')
 xlabel('n');
 ylabel('log10(A)');
 
