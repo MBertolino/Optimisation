@@ -4,7 +4,6 @@ clear all; clear all; clc;
 % http://www.nasdaq.com/markets/indices/major-indices.aspx
 % http://bigcharts.marketwatch.com/markets/indexes.asp
 
-
 % Time period
 start = '2016-01-01';
 stop = today;
