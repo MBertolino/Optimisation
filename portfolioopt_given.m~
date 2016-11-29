@@ -6,6 +6,20 @@ data_input
 rho = 0.1;
 Aineq = [];
 bineq = [];
-Aeq = r;
-b 
-[x,fval,exitflag] = quadprog(si,f,Aineq,bineq,Aeq,beq,lb,ub,x0,options);
+Aeq = [r;ones(size(r))];
+beq = [rho; 1];
+ub = ones(size(r))';
+lb = zeros(size(r))';
+lb = -ub;
+f = zeros(size(r));
+
+x0 = [];
+
+options = optimoptions('quadprog','Algorithm','interior-point-convex');
+options = optimoptions(options,'Display','iter','TolCon', 1e-9,'TolFun',1e-10);
+
+
+rho = 0:0.01:0.2;
+
+for ii = 1:length
+[x,fval,exitflag] = quadprog(H,f,Aineq,bineq,Aeq,beq,lb,ub,x0,options);
