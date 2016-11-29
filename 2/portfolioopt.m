@@ -39,7 +39,7 @@ Q = cov(stocks);
 
 %-------------------------- 2 Quadprog -----------------------------
 
-r = 0.002;                                  % Desired return
+r = 0.1;                                  % Desired return
 ub = ones(nAssets,1);
 lb = -ub;
 Aeq = ones(1,nAssets); beq = 1;             % equality Aeq*x = beq
