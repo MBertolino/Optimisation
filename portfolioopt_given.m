@@ -10,7 +10,7 @@ Aeq = [r;ones(size(r))];
 beq = [rho; 1];
 ub = ones(size(r))';
 lb = zeros(size(r))';
-lb = -ub;
+%lb = -ub;
 f = zeros(size(r));
 
 x0 = [];
