@@ -31,3 +31,14 @@ end
 % Adjust the dates so that all markets has the same date vector
 % [data, N] = correctDates(data);
 % dates = data.(markets{1}).Date;
+
+
+
+
+for ii = 1:length(rho)
+    beq = [rho(ii); 1];
+    [x,fval,exitflag] = quadprog(H,f,Aineq,bineq,Aeq,beq,lb,ub,x0,options);
+    
+    sigma(ii) = fval;
+    
+end
