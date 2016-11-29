@@ -73,9 +73,10 @@ for i = 1:length(n_plot)
 end
 
 
-% plot(1:100, H_plot)
+%% plot(1:100, H_plot)
 figure(1)
 surf(n_plot,log10(A_plot),log10(H_plot),'EdgeColor','none')
+%surf(n_plot,A_plot,H_plot,'EdgeColor','none')
 hold on
 H_minLS = H_cost3([10^plLS(1)/Ascale, plLS(2)]);
 plot3(plLS(2),plLS(1),log10(H_minLS),'marker','o')
