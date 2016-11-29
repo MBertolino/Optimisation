@@ -38,14 +38,35 @@ stdev = std(stocks);
 Q = cov(stocks);
 
 %-------------------------- 2 Quadprog -----------------------------
-
-r = 0.1;                                  % Desired return
+%%
+rho = 0.1;                                  % Desired return
 ub = ones(nAssets,1);
 lb = -ub;
-Aeq = ones(1,nAssets); beq = 1;             % equality Aeq*x = beq
-Aineq = er; bineq = -r;          % inequality Aineq*x <= bineq
+Aeq = ones(1,nAssets); 
+beq = 1;             % equality Aeq*x = beq
+Aineq = er; 
+bineq = -rho;          % inequality Aineq*x <= bineq
 c = zeros(nAssets,1); 
 
 options = optimoptions('quadprog','Algorithm','interior-point-convex');
 options = optimoptions(options,'Display','iter','TolFun',1e-10);
-[x,fval,exitflag,output,lambda] = quadprog(Q,c,Aineq,bineq,Aeq,beq,lb,ub,[],options)
+[x,fval,exitflag,output,lambda] = quadprog(H,c,Aineq,bineq,Aeq,beq,lb,ub,[],options)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
