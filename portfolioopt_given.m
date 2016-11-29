@@ -29,4 +29,25 @@ for ii = 1:length(rho)
     
 end
 
+figure(1)
 plot(sigma, rho)
+
+
+alpha = 0:0.1:1;
+rho = 0.01:0.01:0.2;
+
+for ii = 1:length(rho)
+    for kk = 1:length(alpha)
+        beq = [rho(ii); 1];
+        aH = alpha(kk)*H;
+        f = (1-alpha(kk))*r;
+        [x,fval,exitflag] = quadprog(aH,f,Aineq,bineq,Aeq,beq,lb,ub,x0,options);
+        
+        sigma_ra(ii,kk) = fval;
+    end
+end
+
+surf(alpha, rho, sigma_ra)
+
+
+
