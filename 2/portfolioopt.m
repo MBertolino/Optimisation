@@ -33,25 +33,41 @@ for i = 1:nAssets
         data.(assets{i}).Close(1:end-1)];
 end
 
-er = mean(stocks);
+r = mean(stocks);
 stdev = std(stocks);
 Q = cov(stocks);
 
 %-------------------------- 2 Quadprog -----------------------------
 %%
-rho = 0.1;                                  % Desired return
-ub = ones(nAssets,1);
-lb = -ub;
-Aeq = ones(1,nAssets); 
-beq = 1;             % equality Aeq*x = beq
-Aineq = er; 
-bineq = -rho;          % inequality Aineq*x <= bineq
-c = zeros(nAssets,1); 
+
+% Quadprog to minimise std given expected return
+rho = 0.1;
+Aineq = [];
+bineq = [];
+Aeq = [r;ones(size(r))];
+beq = [rho; 1];
+ub = ones(size(r))';
+lb = zeros(size(r))';
+%lb = -ub;
+f = zeros(size(r));
+x0 = [];
 
 options = optimoptions('quadprog','Algorithm','interior-point-convex');
 options = optimoptions(options,'Display','iter','TolFun',1e-10);
-[x,fval,exitflag,output,lambda] = quadprog(H,c,Aineq,bineq,Aeq,beq,lb,ub,[],options)
+    [x,fval,exitflag] = quadprog(Q,f,Aineq,bineq,Aeq,beq,lb,ub,x0,options);
 
+
+rho = 0.01:0.01:0.2;
+for ii = 1:length(rho)
+    beq = [rho(ii); 1];
+    [x,fval,exitflag] = quadprog(Q,f,Aineq,bineq,Aeq,beq,lb,ub,x0,options);
+    
+    sigma(ii) = fval;
+    
+end
+
+figure(1)
+plot(sigma, rho)
 
 
 
