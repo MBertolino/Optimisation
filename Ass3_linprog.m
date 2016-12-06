@@ -48,8 +48,15 @@ options = optimoptions('linprog','Algorithm','interior-point', 'Display', 'iter'
   
   cost = C*X
   
+
   subplot(121)
-  bar3(reshape(x, 4,3)')
-  subplot(122)
   bar3(reshape(C, 4,3)')
-  
+  title('Fraktkostnad')
+  xlabel('Varuhus')
+  ylabel('Fabrik')
+  subplot(122)
+    bar3(reshape(x,4,3)')
+  title('Fraktade varor')
+    xlabel('Varuhus')
+  ylabel('Fabrik')
+

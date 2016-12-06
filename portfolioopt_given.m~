@@ -80,6 +80,7 @@ plot(sigma.^2, rho)
 Aeq = ones(size(r));
 beq = 1;
 
+<<<<<<< HEAD
 alpha = 0:0.05:1;
 w4 = zeros(length(alpha),length(r));
 sigma_ef = zeros(length(alpha),1);
@@ -92,7 +93,69 @@ for ai = 1:length(alpha)
     ret_ef(ai) = r*w4(ai,:)';
 end
 
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+alpha = 0.05:0.05:1;
+rho = 0.01:0.01:0.2;
 
+for ii = 1:length(rho)
+    for kk = 1:length(alpha)
+        beq = [rho(ii); 1];
+        aH = alpha(kk)*H;
+        f = (1-alpha(kk))*r;
+        [x,fval,exitflag] = quadprog(aH,f,Aineq,bineq,Aeq,beq,lb,ub,x0,options);
+        
+        sigma_ra(ii,kk) = fval;
+    end
+end
+
+surf(alpha, rho, sigma_ra.^2)
+
+
+=======
+alpha = 0:0.05:1;
+w4 = zeros(length(alpha),length(r));
+sigma_ef = zeros(length(alpha),1);
+ret_ef = sigma_ef;
+for ai = 1:length(alpha)
+    Q = 2*alpha(ai)*H;
+    f = (alpha(ai)-1)*r';
+    [w4(ai,:),fval,exitflag] = quadprog(Q,f,[],[],Aeq,beq,lb,ub,[],options);
+    sigma_ef(ai) = sqrt(w4(ai,:)*H*w4(ai,:)');
+    ret_ef(ai) = r*w4(ai,:)';
+end
+
+=======
+alpha = 0:0.05:1;
+w4 = zeros(length(alpha),length(r));
+sigma_ef = zeros(length(alpha),1);
+ret_ef = sigma_ef;
+for ai = 1:length(alpha)
+    Q = 2*alpha(ai)*H;
+    f = (alpha(ai)-1)*r';
+    [w4(ai,:),fval,exitflag] = quadprog(Q,f,[],[],Aeq,beq,lb,ub,[],options);
+    sigma_ef(ai) = sqrt(w4(ai,:)*H*w4(ai,:)');
+    ret_ef(ai) = r*w4(ai,:)';
+end
+
+>>>>>>> MBertolino/master
+=======
+alpha = 0:0.05:1;
+w4 = zeros(length(alpha),length(r));
+sigma_ef = zeros(length(alpha),1);
+ret_ef = sigma_ef;
+for ai = 1:length(alpha)
+    Q = 2*alpha(ai)*H;
+    f = (alpha(ai)-1)*r';
+    [w4(ai,:),fval,exitflag] = quadprog(Q,f,[],[],Aeq,beq,lb,ub,[],options);
+    sigma_ef(ai) = sqrt(w4(ai,:)*H*w4(ai,:)');
+    ret_ef(ai) = r*w4(ai,:)';
+end
+
+>>>>>>> MBertolino/master
+>>>>>>> 841a52145564fe8a874fe3c624186e9341238128
 % Plot efficient frontier
 figure()
 subplot(2,1,1)
@@ -104,7 +167,16 @@ ylabel('Expected return')
 legend('Individual assets', 'Efficient frontier')
 xlim([0.05 max(stdev)*1.1])
 ylim([0 max(r)*1.2])
-
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> MBertolino/master
+=======
+>>>>>>> MBertolino/master
+=======
+>>>>>>> MBertolino/master
+>>>>>>> 841a52145564fe8a874fe3c624186e9341238128
 
 subplot(2,1,2)
 area(sigma_ef,w4)
