@@ -4,6 +4,7 @@ clear all; close all; clc;
 data_input
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 % Quadprog to minimise std given expected return
 rho = 0.1; % Seeked return
 Aineq = []; % Olikheter, 0 för oss
@@ -17,6 +18,8 @@ f = zeros(size(r)); % Nothing
 
 x0 = []; % Startvärde? - Interior point convex algoritm slumpar startvärde.
 =======
+=======
+>>>>>>> MBertolino/master
 %% 2. KKT system. Risk avert
 A11 = H;
 A12 = ones(length(r),1);
@@ -61,6 +64,7 @@ w3b = quadprog(H,f,[],[],Aeq_b,beq_b,lb,ub,x0,options);
 sigma2_b = w3b'*H*w3b;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 rho = 0.01:0.01:0.2; % Different rate of return conditions
 
 for ii = 1:length(rho)
@@ -78,11 +82,17 @@ plot(sigma.^2, rho)
 w3c = quadprog(H,f,[],[],Aeq_c,beq_c,lb,ub,x0,options);
 sigma2_c = w3c'*H*w3c;
 >>>>>>> MBertolino/master
+=======
+% c)
+w3c = quadprog(H,f,[],[],Aeq_c,beq_c,lb,ub,x0,options);
+sigma2_c = w3c'*H*w3c;
+>>>>>>> MBertolino/master
 
 %% 4. Efficient frontier, stepping in alpha
 Aeq = ones(size(r));
 beq = 1;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 alpha = 0.05:0.05:1;
 rho = 0.01:0.01:0.2;
@@ -114,6 +124,20 @@ for ai = 1:length(alpha)
     ret_ef(ai) = r*w4(ai,:)';
 end
 
+=======
+alpha = 0:0.05:1;
+w4 = zeros(length(alpha),length(r));
+sigma_ef = zeros(length(alpha),1);
+ret_ef = sigma_ef;
+for ai = 1:length(alpha)
+    Q = 2*alpha(ai)*H;
+    f = (alpha(ai)-1)*r';
+    [w4(ai,:),fval,exitflag] = quadprog(Q,f,[],[],Aeq,beq,lb,ub,[],options);
+    sigma_ef(ai) = sqrt(w4(ai,:)*H*w4(ai,:)');
+    ret_ef(ai) = r*w4(ai,:)';
+end
+
+>>>>>>> MBertolino/master
 % Plot efficient frontier
 figure()
 subplot(2,1,1)
@@ -125,6 +149,9 @@ ylabel('Expected return')
 legend('Individual assets', 'Efficient frontier')
 xlim([0.05 max(stdev)*1.1])
 ylim([0 max(r)*1.2])
+<<<<<<< HEAD
+>>>>>>> MBertolino/master
+=======
 >>>>>>> MBertolino/master
 
 subplot(2,1,2)
